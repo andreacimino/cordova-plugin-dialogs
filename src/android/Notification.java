@@ -38,8 +38,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.widget.EditText;
 import android.widget.TextView;
-
-
 /**
  * This class provides access to notifications on the device.
  *
@@ -303,7 +301,25 @@ public class Notification extends CordovaPlugin {
                 dlg.setView(promptInput);
                 
                 final JSONObject result = new JSONObject();
-                
+                if (buttonLabels.length() == 3) {
+                    dlg.setItems(new String[]{buttonLabels.getString(0),
+                                              buttonLabels.getString(1),
+                                              buttonLabels.getString(2)},
+                        new AlertDialog.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    try {
+                                        result.put("buttonIndex", which);
+                                        result.put("input1", promptInput.getText().toString().trim().length()==0 ? defaultText : promptInput.getText());											
+                                    } catch (JSONException e) {
+                                        LOG.d(LOG_TAG,"JSONException on first button.", e);
+                                    }
+                                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
+                                }
+                     })
+                }
+
+                else {
                 // First button
                 if (buttonLabels.length() > 0) {
                     try {
@@ -375,8 +391,8 @@ public class Notification extends CordovaPlugin {
                         } catch (JSONException e) { e.printStackTrace(); }
                         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
                     }
-                });
-
+                    });
+                }
                 changeTextDirection(dlg);
             };
         };
