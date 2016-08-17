@@ -316,7 +316,7 @@ public class Notification extends CordovaPlugin {
                                     }
                                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
                                 }
-                     })
+                        });
                 }
 
                 else {
