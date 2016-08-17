@@ -302,10 +302,11 @@ public class Notification extends CordovaPlugin {
                 
                 final JSONObject result = new JSONObject();
                 if (buttonLabels.length() == 3) {
-                    dlg.setItems(new String[]{buttonLabels.getString(0),
-                                              buttonLabels.getString(1),
-                                              buttonLabels.getString(2)},
-                        new AlertDialog.OnClickListener() {
+                    try {
+                        dlg.setItems(new String[]{buttonLabels.getString(0),
+                                                  buttonLabels.getString(1),
+                                                  buttonLabels.getString(2)},
+                            new AlertDialog.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                     try {
@@ -317,8 +318,11 @@ public class Notification extends CordovaPlugin {
                                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
                                 }
                         });
+                    }
+                     catch (JSONException e) {
+                         LOG.d(LOG_TAG,"JSONException on first button.");
+                     }
                 }
-
                 else {
                 // First button
                 if (buttonLabels.length() > 0) {
